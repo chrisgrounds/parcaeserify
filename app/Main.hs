@@ -5,6 +5,7 @@ import Control.Parallel ()
 import Control.Parallel.Strategies ( parList, rdeepseq, using )
 import Data.Time.Clock.POSIX
 import Data.Maybe
+import Control.DeepSeq
 import qualified Data.HashMap.Strict as HM
 
 createLookupTable :: Int -> HM.HashMap Char Char
@@ -16,13 +17,13 @@ createLookupTable n =
 shiftedChar :: Char -> Int -> Char
 shiftedChar c n =
   let base = if isUpper c then 'A' else 'a'
-  in chr(mod ((ord c - ord base) + n) 26 + ord base)
+  in chr(mod (ord c - ord base + n) 26 + ord base)
 
-shiftedWord :: [Char] -> HM.HashMap Char Char -> [Char]
-shiftedWord w lookupTable = fmap (\x -> fromMaybe '?' $ HM.lookup x lookupTable) w `using` parList rdeepseq
+shiftedWord :: String -> HM.HashMap Char Char -> String
+shiftedWord w lookupTable = fmap (\x -> fromMaybe '?' $ HM.lookup x lookupTable) w
 
-caeserify :: [Char] -> Int -> [Char]
-caeserify m n = 
+caeserify :: String -> Int -> String
+caeserify m n =
   let lookupTable = createLookupTable n
   in unwords (fmap (`shiftedWord` lookupTable) (words m))
 
@@ -30,11 +31,12 @@ main :: IO ()
 main = do
   contents <- readFile "./prideAndPrejudice.txt"
   r1 <- (getPOSIXTime :: IO POSIXTime)
-  print $ "start: " ++ (show r1)
+  print $ "start: " ++ show r1
 
   let result = caeserify contents 3
-  
+  deepseq result (return ())
+
   r2 <- (getPOSIXTime :: IO POSIXTime)
-  print $ "end: " ++ (show r2)
-  print $ "time taken: " ++ (show $ r2 - r1)
+  print $ "end: " ++ show r2
+  print $ "time taken: " ++ show (r2 - r1)
   writeFile "./encodedPrideAndPrejudice" result

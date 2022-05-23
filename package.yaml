@@ -39,6 +39,7 @@ executables:
     - parallel
     - time
     - unordered-containers
+    - deepseq
 
 tests:
   parcaeserify-test:
