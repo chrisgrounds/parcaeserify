@@ -37,6 +37,7 @@ executables:
     dependencies:
     - parcaeserify
     - parallel
+    - time
 
 tests:
   parcaeserify-test:

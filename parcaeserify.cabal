@@ -45,6 +45,7 @@ executable parcaeserify-exe
       base >=4.7 && <5
     , parallel
     , parcaeserify
+    , time
   default-language: Haskell2010
 
 test-suite parcaeserify-test
