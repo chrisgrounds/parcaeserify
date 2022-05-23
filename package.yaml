@@ -38,6 +38,7 @@ executables:
     - parcaeserify
     - parallel
     - time
+    - unordered-containers
 
 tests:
   parcaeserify-test:

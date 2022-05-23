@@ -46,6 +46,7 @@ executable parcaeserify-exe
     , parallel
     , parcaeserify
     , time
+    , unordered-containers
   default-language: Haskell2010
 
 test-suite parcaeserify-test
